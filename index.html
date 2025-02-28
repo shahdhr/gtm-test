@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ecommerce Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .tabs {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background: #0073e6;
+      border-bottom: 1px solid #005bb5;
+    }
+    .tabs li {
+      flex: 1;
+      text-align: center;
+      padding: 15px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .tabs li:hover {
+      background: #005bb5;
+    }
+    .tabs li.active {
+      background: #005bb5;
+    }
+    .content {
+      padding: 20px;
+      display: none;
+    }
+    .content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <ul class="tabs">
+      <li class="tab active" data-tab="pageview">Page View</li>
+      <li class="tab" data-tab="addtocart">Add to Cart</li>
+      <li class="tab" data-tab="login">Log In</li>
+      <li class="tab" data-tab="checkout">Checkout</li>
+      <li class="tab" data-tab="purchase">Purchase</li>
+    </ul>
+    <div class="content active" id="pageview">
+      <h2>Page View</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.</p>
+    </div>
+    <div class="content" id="addtocart">
+      <h2>Add to Cart</h2>
+      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+    </div>
+    <div class="content" id="login">
+      <h2>Log In</h2>
+      <p>Quisque velit nisi, pretium ut lacinia in, elementum id enim. Donec sollicitudin molestie malesuada.</p>
+    </div>
+    <div class="content" id="checkout">
+      <h2>Checkout</h2>
+      <p>Cras ultricies ligula sed magna dictum porta. Pellentesque in ipsum id orci porta dapibus.</p>
+    </div>
+    <div class="content" id="purchase">
+      <h2>Purchase</h2>
+      <p>Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Vivamus suscipit tortor eget felis porttitor.</p>
+    </div>
+  </div>
+
+  <script>
+    // Initialize the dataLayer array if it doesn't exist.
+    window.dataLayer = window.dataLayer || [];
+
+    // Function to push GTM events to the dataLayer
+    function pushGTMEvent(eventName) {
+      dataLayer.push({ event: eventName });
+      console.log('GTM event fired:', eventName);
+    }
+
+    // Get all tab elements and content panels
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.content');
+
+    // Add click event listeners to each tab
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active classes from all tabs and hide all content
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        // Activate the clicked tab and its corresponding content
+        this.classList.add('active');
+        const tabId = this.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+
+        // Fire a GTM event based on the selected tab
+        switch (tabId) {
+          case 'pageview':
+            pushGTMEvent('page_view');
+            break;
+          case 'addtocart':
+            pushGTMEvent('add_to_cart');
+            break;
+          case 'login':
+            pushGTMEvent('log_in');
+            break;
+          case 'checkout':
+            pushGTMEvent('checkout');
+            break;
+          case 'purchase':
+            pushGTMEvent('purchase');
+            break;
+          default:
+            break;
+        }
+      });
+    });
+
+    // Fire an initial page view event when the page loads.
+    pushGTMEvent('page_view');
+  </script>
+</body>
+</html>
